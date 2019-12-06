@@ -1,0 +1,64 @@
+version: 2.1
+orbs:
+  docker: circleci/docker@0.5.13
+
+branch-filters: &branch-filters
+  filters:
+    branches:
+      only:
+        - master
+        - staging
+
+jobs:
+  test:
+    working_directory: ~/pennlabs
+    docker:
+      - image: circleci/node:10
+        environment:
+          MONGO_URI: mongodb://127.0.0.1:27017/data
+      - image: circleci/mongo:4.2.0
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "yarn.lock" }}
+      - run:
+          name: Install dependencies
+          command: |
+            yarn install
+      - save_cache:
+          key: dependency-cache-{{ checksum "yarn.lock" }}
+          paths:
+            - ./node_modules
+            - ~/.cache/yarn
+      - run:
+          name: Lint
+          command: |
+            yarn lint
+  deploy:
+    working_directory: ~/pennlabs
+    docker:
+      - image: pennlabs/labs-helm
+    steps:
+      - checkout
+      - run:
+          name: Deploy to k8s
+          command: /deploy.sh
+
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+      - test
+      - docker/publish:
+          name: publish
+          requires:
+            - test
+          image: pennlabs/<image_name>
+          tag: $CIRCLE_SHA1
+          context: docker-publish
+          <<: *branch-filters
+      - deploy:
+          requires:
+            - publish
+          context: k8s-deploy
+          <<: *branch-filters

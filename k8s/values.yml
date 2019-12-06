@@ -1,0 +1,16 @@
+replicaCount: 1
+
+image:
+  repository: pennlabs/<image_name>
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  port: 80
+
+ingress:
+  enabled: true
+  domain: example.com
+
+secrets:
+  secretEnv: example
