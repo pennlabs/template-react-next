@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: pennlabs/<image_name>
+  repository: pennlabs/image-name
   tag: latest
   pullPolicy: IfNotPresent
 

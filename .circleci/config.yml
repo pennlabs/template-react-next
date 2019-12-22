@@ -53,7 +53,7 @@ workflows:
           name: publish
           requires:
             - test
-          image: pennlabs/<image_name>
+          image: pennlabs/image-name
           tag: $CIRCLE_SHA1
           context: docker-publish
           <<: *branch-filters
