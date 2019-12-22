@@ -1,6 +1,7 @@
 version: 2.1
 orbs:
-  docker: circleci/docker@0.5.13
+  docker: circleci/docker@0.5.19
+  deploy: pennlabs/deploy@0.0.1
 
 branch-filters: &branch-filters
   filters:
@@ -34,15 +35,6 @@ jobs:
           name: Lint
           command: |
             yarn lint
-  deploy:
-    working_directory: ~/pennlabs
-    docker:
-      - image: pennlabs/labs-helm
-    steps:
-      - checkout
-      - run:
-          name: Deploy to k8s
-          command: /deploy.sh
 
 workflows:
   version: 2
@@ -50,15 +42,15 @@ workflows:
     jobs:
       - test
       - docker/publish:
-          name: publish
           requires:
             - test
+          cache_from: "pennlabs/image-name:latest"
           image: pennlabs/image-name
-          tag: $CIRCLE_SHA1
+          tag: "${CIRCLE_SHA1},latest"
           context: docker-publish
           <<: *branch-filters
-      - deploy:
+      - deploy/deploy:
           requires:
-            - publish
+            - docker/publish
           context: k8s-deploy
           <<: *branch-filters
