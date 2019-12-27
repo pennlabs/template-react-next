@@ -1,21 +1,3 @@
-<<<<<<< Updated upstream
-replicaCount: 1
-
-image:
-  repository: pennlabs/image-name
-  tag: latest
-  pullPolicy: IfNotPresent
-
-service:
-  port: 80
-
-ingress:
-  enabled: true
-  domain: example.com
-
-secrets:
-  secretEnv: example
-=======
 deploy_version: 0.1.1
 image_tag: latest
 
@@ -30,4 +12,3 @@ applications:
       hosts:
         - host: example.com
           paths: ["/"]
->>>>>>> Stashed changes
