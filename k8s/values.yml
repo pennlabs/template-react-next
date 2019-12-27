@@ -3,7 +3,7 @@ image_tag: latest
 
 applications:
   - name: worker
-    image: pennlabs/<image_name>
+    image: pennlabs/image-name
     secret: example
     extraEnv:
       - name: PORT
