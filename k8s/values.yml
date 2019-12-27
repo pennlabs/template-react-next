@@ -1,16 +1,14 @@
-replicaCount: 1
+deploy_version: 0.1.1
+image_tag: latest
 
-image:
-  repository: pennlabs/image-name
-  tag: latest
-  pullPolicy: IfNotPresent
-
-service:
-  port: 80
-
-ingress:
-  enabled: true
-  domain: example.com
-
-secrets:
-  secretEnv: example
+applications:
+  - name: worker
+    image: pennlabs/image-name
+    secret: example
+    extraEnv:
+      - name: PORT
+        value: 80
+    ingress:
+      hosts:
+        - host: example.com
+          paths: ["/"]
