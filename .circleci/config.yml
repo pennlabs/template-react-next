@@ -15,26 +15,22 @@ jobs:
     working_directory: ~/pennlabs
     docker:
       - image: circleci/node:10
-        environment:
-          MONGO_URI: mongodb://127.0.0.1:27017/data
-      - image: circleci/mongo:4.2.0
     steps:
       - checkout
       - restore_cache:
-          key: dependency-cache-{{ checksum "yarn.lock" }}
+          key: dependency-cache-{{ checksum "package-lock.json" }}
       - run:
           name: Install dependencies
           command: |
-            yarn install
+            npm install
       - save_cache:
-          key: dependency-cache-{{ checksum "yarn.lock" }}
+          key: dependency-cache-{{ checksum "package-lock.json" }}
           paths:
             - ./node_modules
-            - ~/.cache/yarn
       - run:
           name: Lint
           command: |
-            yarn lint
+            npm run lint
 
 workflows:
   version: 2
