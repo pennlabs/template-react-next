@@ -2,13 +2,13 @@ deploy_version: 0.1.1
 image_tag: latest
 
 applications:
-  - name: worker
+  - name: react
     image: pennlabs/image-name
     secret: example
-    extraEnv:
-      - name: PORT
-        value: 80
     ingress:
       hosts:
         - host: example.com
           paths: ["/"]
+    extraEnv:
+      - name: PORT
+        value: 80
