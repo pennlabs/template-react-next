@@ -13,4 +13,7 @@ RUN npm install --production=true
 # Copy project files
 COPY . /app/
 
+# Build project
+RUN npm run build
+
 CMD ["npm", "start"]
